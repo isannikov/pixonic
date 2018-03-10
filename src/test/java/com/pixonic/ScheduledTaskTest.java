@@ -46,10 +46,10 @@ public class ScheduledTaskTest {
     public void compareOtherDelayed() {
         PriorityQueue<Delayed> tasks = new PriorityQueue<>();
 
-        OtherDelayed o1 = new OtherDelayed(now().plusSeconds(1));
-        ScheduledTask o2 = new ScheduledTask(now().plusSeconds(1), () -> "1");
-        OtherDelayed o3 = new OtherDelayed(now().plusSeconds(5));
-        OtherDelayed o4 = new OtherDelayed(now().plusSeconds(1));
+        OtherDelayed o1 = new OtherDelayed(now().plusSeconds(1), "1");
+        ScheduledTask o2 = new ScheduledTask(now().plusSeconds(1).plusNanos(1), () -> "2");
+        OtherDelayed o3 = new OtherDelayed(now().plusSeconds(5), "3");
+        OtherDelayed o4 = new OtherDelayed(now().plusSeconds(1).plusNanos(2), "4");
 
         tasks.add(o1);
         tasks.add(o2);
@@ -64,9 +64,11 @@ public class ScheduledTaskTest {
 
     private static class OtherDelayed implements Delayed {
         final LocalDateTime time;
+        final String name;
 
-        private OtherDelayed(LocalDateTime time) {
+        private OtherDelayed(LocalDateTime time, String name) {
             this.time = time;
+            this.name = name;
         }
 
         @Override
@@ -81,6 +83,13 @@ public class ScheduledTaskTest {
                     getDelay(TimeUnit.NANOSECONDS),
                     o.getDelay(TimeUnit.NANOSECONDS)
             );
+        }
+
+        @Override
+        public String toString() {
+            return "OtherDelayed{" +
+                    "name='" + name + '\'' +
+                    '}';
         }
     }
 }

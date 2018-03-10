@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class MultithreadSchedulerTest extends SchedulerTest {
     @Before
     public void setUp() throws Exception {
-        scheduler = new MultithreadScheduler();
+        scheduler = new Scheduler();
     }
 
     @Test

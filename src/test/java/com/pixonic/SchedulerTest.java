@@ -131,33 +131,6 @@ public abstract class SchedulerTest {
         assertEquals(Arrays.asList("1", "2"), results);
     }
 
-    @Test
-    public void executeTasksWithEqualsTime() throws Exception {
-        scheduler.start();
-
-        LocalDateTime time = now().plusSeconds(1);
-        CountDownLatch latch = new CountDownLatch(2);
-        List<String> results = new CopyOnWriteArrayList<>();
-        scheduler.schedule(time, () -> {
-            try {
-                return results.add("2");
-            } finally {
-                latch.countDown();
-            }
-        });
-        scheduler.schedule(time, () -> {
-            try {
-                return results.add("1");
-            } finally {
-                latch.countDown();
-            }
-        });
-
-        latch.await(2, TimeUnit.SECONDS);
-        assertEquals(0, latch.getCount());
-        assertEquals(Arrays.asList("2", "1"), results);
-    }
-
     private static void assertException(Runnable r, Class<? extends Throwable> exceptionClass, String exceptionMessage) {
         Throwable t = null;
         try {
